@@ -24,7 +24,7 @@
   }
   #widget_box{
       display:flex;
-      background-color:rgba(0, 255, 0, 0.5);
+      background-color:rgba(21,21,21,0.6);
   }
   #widget_box>div{
       background-color:transparent;
@@ -32,21 +32,37 @@
   }
 </style>
 <script>
-  var widgets_in_upper_box = true;
-  function do_change_place(){
-      var upper_box = document.getElementById("upper_box");
-      var lower_box = document.getElementById("lower_box");
-      var widget_box = document.getElementById("widget_box");
+function do_change_place(){
+    var upper_box = document.getElementById("upper_box");
+    var lower_box = document.getElementById("lower_box");
+    var widget_box = document.getElementById("widget_box");
+    var color_input = document.getElementById("color_input");
+    
+    var input_value = color_input.value.trim();
+    try {
+        var parts = input_value.split(",");
+        if (parts.length !== 4) {
+            throw new Error("Invalid RGBA string format. Example: 21,21,21,0.6");
+        }
+        var rgba = parts.map(parseFloat);
+        if (!rgba.every(function (value) { return !isNaN(value) && value >= 0 && value <= 255; })) {
+            throw new Error("Invalid RGBA string format. Values must be between 0 and 255.");
+        }
+        if (rgba[3] < 0 || rgba[3] > 1) {
+            throw new Error("Invalid RGBA string format. Alpha value must be between 0 and 1.");
+        }
+        widget_box.style.backgroundColor = "rgba(" + rgba.join(",") + ")";
 
-      if(widgets_in_upper_box){
-          lower_box.appendChild(widget_box)
-          widgets_in_upper_box = false;
-      }
-      else{
-          upper_box.appendChild(widget_box)
-          widgets_in_upper_box = true;
-      }
-  }
+    } catch (error) {
+        console.error(error.message);
+    }
+    
+    if(widget_box.parentNode === upper_box){
+        lower_box.appendChild(widget_box);
+    } else {
+        upper_box.appendChild(widget_box);
+    }
+}
 </script>
 </head>
 <body>
@@ -54,8 +70,9 @@
 <div id="web_box">
 	<div id="upper_box">
     	<div id="widget_box">
-        	<div><button onclick="do_change_place()">Change Place</button></div>
-            <div>Sample Label</div>
+        	<div style="padding-right:10px;"><button onclick="do_change_place()">Change Place</button></div>
+            <div style="padding-left:-10px; padding-right:0px; color:white;">WebView RGBA:</div>
+            <div style="padding-left:10px;"><input type="text" id="color_input" placeholder="21,21,21,0.6" value="21,21,21,0.6"/></div>
         </div>
     </div>
     <div id="lower_box"></div>
@@ -63,3 +80,5 @@
 
 </body>
 </html>
+
+
