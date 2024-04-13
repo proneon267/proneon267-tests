@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body{
+      margin:0;
+      padding:0;
+  }
+  #web_box{
+      display:flex;
+      flex-direction:column;
+      height:100vh;
+
+  }
+  #web_box>div{
+      width:100%;
+      height:100%;
+  }
+  #upper_box{
+      background-color:rgba(255,0,0,1);
+  }
+  #lower_box{
+      background-color:rgba(0,0,255,1);
+  }
+  #widget_box{
+      display:flex;
+      background-color:rgba(0, 255, 0, 0.5);
+  }
+  #widget_box>div{
+      background-color:transparent;
+      padding:20px;
+  }
+</style>
+<script>
+  var widgets_in_upper_box = true;
+  function do_change_place(){
+      var upper_box = document.getElementById("upper_box");
+      var lower_box = document.getElementById("lower_box");
+      var widget_box = document.getElementById("widget_box");
+
+      if(widgets_in_upper_box){
+          lower_box.appendChild(widget_box)
+          widgets_in_upper_box = false;
+      }
+      else{
+          upper_box.appendChild(widget_box)
+          widgets_in_upper_box = true;
+      }
+  }
+</script>
+</head>
+<body>
+
+<div id="web_box">
+	<div id="upper_box">
+    	<div id="widget_box">
+        	<div><button onclick="do_change_place()">Change Place</button></div>
+            <div>Sample Label</div>
+        </div>
+    </div>
+    <div id="lower_box"></div>
+</div>
+
+</body>
+</html>
